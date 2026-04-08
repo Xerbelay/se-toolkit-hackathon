@@ -1,0 +1,417 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ExpenseMate</title>
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body>
+    <div class="page-shell">
+      <header class="hero">
+        <div class="hero-copy-block">
+          <p class="eyebrow" data-i18n="hero.eyebrow">Personal finance workspace</p>
+          <h1>ExpenseMate</h1>
+          <p class="hero-copy" data-i18n="hero.copy">
+            Track spending, plan budgets, manage recurring payments, save for goals, and get useful coaching from the assistant.
+          </p>
+          <p id="guest-copy" class="muted-copy" data-i18n="hero.guest">
+            Sign in to keep your expenses, goals, and recurring payments private.
+          </p>
+        </div>
+        <div class="hero-toolbar">
+          <div class="lang-switch" role="group" aria-label="Language switcher">
+            <button id="lang-en-btn" class="lang-btn active" type="button">EN</button>
+            <button id="lang-ru-btn" class="lang-btn" type="button">RU</button>
+          </div>
+          <div id="user-box" class="user-box hidden">
+            <div>
+              <div id="user-name" class="user-name"></div>
+              <div id="user-email" class="user-email"></div>
+            </div>
+            <button id="logout-btn" class="secondary" type="button" data-i18n="auth.logout">Log out</button>
+          </div>
+          <div id="app-actions" class="hero-actions hidden">
+            <button id="seed-demo-btn" type="button" data-i18n="app.seed">Seed demo data</button>
+            <button id="refresh-btn" class="secondary" type="button" data-i18n="app.refresh">Refresh</button>
+          </div>
+        </div>
+      </header>
+
+      <section id="auth-panel" class="panel auth-panel">
+        <div class="panel-header">
+          <h2 data-i18n="auth.title">Sign in or create an account</h2>
+          <p data-i18n="auth.subtitle">Every account gets its own expenses, budgets, recurring schedules, and goals.</p>
+        </div>
+        <div class="auth-grid">
+          <form id="register-form" class="stack auth-form">
+            <h3 data-i18n="auth.create">Create account</h3>
+            <label>
+              <span data-i18n="auth.name">Name</span>
+              <input name="name" type="text" maxlength="120" data-i18n-placeholder="auth.namePlaceholder" placeholder="Ivan Ivanov" required />
+            </label>
+            <label>
+              <span data-i18n="auth.email">Email</span>
+              <input name="email" type="email" maxlength="255" data-i18n-placeholder="auth.emailPlaceholder" placeholder="student@example.com" required />
+            </label>
+            <label>
+              <span data-i18n="auth.password">Password</span>
+              <input name="password" type="password" minlength="8" maxlength="128" data-i18n-placeholder="auth.passwordPlaceholder" placeholder="At least 8 characters" required />
+            </label>
+            <button type="submit" data-i18n="auth.createButton">Create account</button>
+            <p id="register-status" class="status"></p>
+          </form>
+
+          <form id="login-form" class="stack auth-form">
+            <h3 data-i18n="auth.signIn">Sign in</h3>
+            <label>
+              <span data-i18n="auth.email">Email</span>
+              <input name="email" type="email" maxlength="255" data-i18n-placeholder="auth.emailPlaceholder" placeholder="student@example.com" required />
+            </label>
+            <label>
+              <span data-i18n="auth.password">Password</span>
+              <input name="password" type="password" minlength="8" maxlength="128" data-i18n-placeholder="auth.signInPasswordPlaceholder" placeholder="Your password" required />
+            </label>
+            <button type="submit" data-i18n="auth.signInButton">Sign in</button>
+            <p id="login-status" class="status"></p>
+          </form>
+        </div>
+      </section>
+
+      <main id="app-main" class="layout-grid hidden">
+        <div class="sidebar-stack">
+          <section class="panel add-panel">
+            <div class="panel-header compact-header">
+              <h2 id="expense-form-title" data-i18n="expense.formTitle">Add expense</h2>
+              <p data-i18n="expense.formSubtitle">Quickly log a spending record and keep the dashboard up to date.</p>
+            </div>
+            <form id="expense-form" class="stack">
+              <input type="hidden" id="expense-id-input" />
+              <label>
+                <span data-i18n="expense.amount">Amount (€)</span>
+                <input name="amount" type="number" step="0.01" min="0.01" placeholder="12.50" required />
+              </label>
+              <label>
+                <span data-i18n="expense.category">Category</span>
+                <select id="category-select" name="category"></select>
+              </label>
+              <label>
+                <span data-i18n="expense.description">Description</span>
+                <input name="description" type="text" data-i18n-placeholder="expense.descriptionPlaceholder" placeholder="Lunch near campus" required />
+              </label>
+              <label>
+                <span data-i18n="expense.date">Date</span>
+                <input id="spent-on-input" name="spent_on" type="date" required />
+              </label>
+              <div class="action-row">
+                <button id="expense-submit-btn" type="submit" data-i18n="expense.save">Save expense</button>
+                <button id="cancel-expense-edit-btn" class="secondary hidden" type="button" data-i18n="common.cancelEdit">Cancel edit</button>
+              </div>
+            </form>
+            <p id="expense-status" class="status"></p>
+
+            <div class="mini-divider"></div>
+
+            <div class="panel-header compact-header">
+              <h3 data-i18n="budget.title">Monthly budget</h3>
+              <p data-i18n="budget.subtitle">Set a limit and see how much room is left this month.</p>
+            </div>
+            <form id="budget-form" class="stack compact-form">
+              <label>
+                <span data-i18n="budget.limit">Budget limit (€)</span>
+                <input id="budget-input" name="monthly_limit" type="number" step="0.01" min="0.01" placeholder="500.00" required />
+              </label>
+              <button type="submit" data-i18n="budget.save">Save budget</button>
+            </form>
+            <p id="budget-status" class="status"></p>
+          </section>
+
+          <section class="panel assistant-panel">
+            <div class="panel-header compact-header">
+              <h2 data-i18n="assistant.title">Expense assistant</h2>
+              <p data-i18n="assistant.subtitle">Ask for summaries, budgets, savings tips, goal updates, forecasts, or quick actions.</p>
+            </div>
+            <div id="assistant-response" class="assistant-response empty-state">
+              Ask something like “Analyze my spending” or “Create goal Laptop 1200 by 2026-12-31”.
+            </div>
+            <div id="assistant-suggestions" class="suggestion-wrap"></div>
+            <form id="assistant-form" class="stack assistant-form">
+              <textarea id="assistant-input" rows="4" data-i18n-placeholder="assistant.placeholder" placeholder="Ask about your spending, budgets, goals, or recurring payments"></textarea>
+              <button type="submit" data-i18n="assistant.send">Send</button>
+            </form>
+          </section>
+        </div>
+
+        <section class="panel dashboard-panel">
+          <div class="panel-header row-between">
+            <div>
+              <h2 data-i18n="dashboard.title">Dashboard</h2>
+              <p data-i18n="dashboard.subtitle">Understand spending, spot risks, and see what deserves attention right now.</p>
+            </div>
+            <label class="compact-field max-w-220">
+              <span data-i18n="dashboard.period">Period</span>
+              <select id="period-select">
+                <option value="this_week" data-i18n="period.thisWeek">This week</option>
+                <option value="this_month" selected data-i18n="period.thisMonth">This month</option>
+                <option value="last_30_days" data-i18n="period.last30Days">Last 30 days</option>
+                <option value="all_time" data-i18n="period.allTime">All time</option>
+              </select>
+            </label>
+          </div>
+          <div id="cards" class="cards-grid"></div>
+          <section id="budget-summary-panel"></section>
+          <section id="coach-panel" class="coach-panel"></section>
+          <div class="dashboard-columns">
+            <div class="panel-subsection">
+              <h3 data-i18n="dashboard.insights">Key insights</h3>
+              <div id="insights-list" class="insights-list"></div>
+            </div>
+            <div class="panel-subsection">
+              <h3 data-i18n="dashboard.monthlyTrend">Monthly trend</h3>
+              <div id="monthly-trend" class="monthly-chart"></div>
+            </div>
+          </div>
+          <div class="dashboard-columns three">
+            <div class="panel-subsection">
+              <h3 data-i18n="dashboard.byCategory">Spending by category</h3>
+              <div id="category-breakdown" class="breakdown-list"></div>
+            </div>
+            <div class="panel-subsection">
+              <h3 data-i18n="dashboard.dailyTrend">Daily trend</h3>
+              <div id="daily-trend" class="trend-list"></div>
+            </div>
+            <div class="panel-subsection">
+              <h3 data-i18n="dashboard.recurringSoon">Upcoming recurring</h3>
+              <div id="due-recurring-list" class="breakdown-list"></div>
+            </div>
+          </div>
+        </section>
+
+        <section class="panel expenses-panel">
+          <div class="panel-header row-between">
+            <div>
+              <h2 data-i18n="expenses.title">Expenses</h2>
+              <p data-i18n="expenses.subtitle">Filter, review, edit, and export your saved records.</p>
+            </div>
+            <button id="export-btn" class="secondary" type="button" data-i18n="expenses.export">Export CSV</button>
+          </div>
+
+          <div class="filters-grid">
+            <label class="compact-field">
+              <span data-i18n="expenses.search">Search</span>
+              <input id="search-input" type="text" data-i18n-placeholder="expenses.searchPlaceholder" placeholder="coffee, rent, taxi..." />
+            </label>
+            <label class="compact-field">
+              <span data-i18n="expense.category">Category</span>
+              <select id="filter-category-select"></select>
+            </label>
+            <label class="compact-field">
+              <span data-i18n="expenses.from">From</span>
+              <input id="start-date-input" type="date" />
+            </label>
+            <label class="compact-field">
+              <span data-i18n="expenses.to">To</span>
+              <input id="end-date-input" type="date" />
+            </label>
+            <div class="filter-buttons">
+              <button id="clear-filters-btn" class="secondary" type="button" data-i18n="expenses.clearFilters">Clear filters</button>
+            </div>
+          </div>
+          <div id="active-filters" class="active-filters"></div>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th data-i18n="expense.date">Date</th>
+                  <th data-i18n="expense.description">Description</th>
+                  <th data-i18n="expense.category">Category</th>
+                  <th data-i18n="expense.amount">Amount (€)</th>
+                  <th data-i18n="common.actions">Actions</th>
+                </tr>
+              </thead>
+              <tbody id="expenses-body"></tbody>
+            </table>
+          </div>
+        </section>
+
+        <div class="two-up-grid">
+          <section class="panel goals-panel">
+            <div class="panel-header compact-header">
+              <h2 id="goal-form-title" data-i18n="goals.title">Savings goals</h2>
+              <p data-i18n="goals.subtitle">Track what you are saving for and how much you still need.</p>
+            </div>
+            <form id="goal-form" class="stack compact-form">
+              <input type="hidden" id="goal-id-input" />
+              <label>
+                <span data-i18n="goals.name">Goal name</span>
+                <input name="title" type="text" data-i18n-placeholder="goals.namePlaceholder" placeholder="Laptop, vacation, emergency fund" required />
+              </label>
+              <div class="two-field-grid">
+                <label>
+                  <span data-i18n="goals.target">Target amount (€)</span>
+                  <input name="target_amount" type="number" step="0.01" min="0.01" placeholder="1200" required />
+                </label>
+                <label>
+                  <span data-i18n="goals.current">Already saved (€)</span>
+                  <input name="current_amount" type="number" step="0.01" min="0" placeholder="250" required />
+                </label>
+              </div>
+              <div class="two-field-grid">
+                <label>
+                  <span data-i18n="goals.date">Target date</span>
+                  <input name="target_date" type="date" />
+                </label>
+                <label>
+                  <span data-i18n="goals.note">Note</span>
+                  <input name="note" type="text" data-i18n-placeholder="goals.notePlaceholder" placeholder="Optional note" />
+                </label>
+              </div>
+              <div class="action-row">
+                <button id="goal-submit-btn" type="submit" data-i18n="goals.save">Save goal</button>
+                <button id="cancel-goal-edit-btn" class="secondary hidden" type="button" data-i18n="common.cancelEdit">Cancel edit</button>
+              </div>
+            </form>
+            <p id="goal-status" class="status"></p>
+            <div id="goal-cards" class="goal-card-grid"></div>
+          </section>
+
+          <section class="panel category-budget-panel">
+            <div class="panel-header compact-header">
+              <h2 id="category-budget-form-title" data-i18n="categoryBudgets.title">Category budgets</h2>
+              <p data-i18n="categoryBudgets.subtitle">Limit specific categories like food or transport and catch overspending earlier.</p>
+            </div>
+            <form id="category-budget-form" class="stack compact-form">
+              <input type="hidden" id="category-budget-id-input" />
+              <div class="two-field-grid">
+                <label>
+                  <span data-i18n="expense.category">Category</span>
+                  <select id="category-budget-select" name="category"></select>
+                </label>
+                <label>
+                  <span data-i18n="categoryBudgets.limit">Monthly limit (€)</span>
+                  <input name="monthly_limit" type="number" step="0.01" min="0.01" placeholder="120" required />
+                </label>
+              </div>
+              <div class="action-row">
+                <button id="category-budget-submit-btn" type="submit" data-i18n="categoryBudgets.save">Save category budget</button>
+                <button id="cancel-category-budget-edit-btn" class="secondary hidden" type="button" data-i18n="common.cancelEdit">Cancel edit</button>
+              </div>
+            </form>
+            <p id="category-budget-status" class="status"></p>
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th data-i18n="expense.category">Category</th>
+                    <th data-i18n="categoryBudgets.limit">Monthly limit (€)</th>
+                    <th data-i18n="categoryBudgets.spent">Spent this month</th>
+                    <th data-i18n="categoryBudgets.remaining">Remaining</th>
+                    <th data-i18n="categoryBudgets.progress">Progress</th>
+                    <th data-i18n="common.actions">Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="category-budget-body"></tbody>
+              </table>
+            </div>
+          </section>
+        </div>
+
+        <div class="two-up-grid">
+          <section class="panel recurring-panel">
+            <div class="panel-header compact-header">
+              <h2 id="recurring-form-title" data-i18n="recurring.title">Recurring payments</h2>
+              <p data-i18n="recurring.subtitle">Manage subscriptions, rent, utilities, and other repeating expenses.</p>
+            </div>
+            <form id="recurring-form" class="stack compact-form">
+              <input type="hidden" id="recurring-id-input" />
+              <div class="two-field-grid">
+                <label>
+                  <span data-i18n="expense.amount">Amount (€)</span>
+                  <input name="amount" type="number" step="0.01" min="0.01" placeholder="15.00" required />
+                </label>
+                <label>
+                  <span data-i18n="expense.category">Category</span>
+                  <select id="recurring-category-select" name="category"></select>
+                </label>
+              </div>
+              <label>
+                <span data-i18n="expense.description">Description</span>
+                <input name="description" type="text" data-i18n-placeholder="recurring.descriptionPlaceholder" placeholder="Spotify, rent, internet" required />
+              </label>
+              <div class="two-field-grid">
+                <label>
+                  <span data-i18n="recurring.frequency">Frequency</span>
+                  <select name="frequency">
+                    <option value="monthly" data-i18n="recurring.monthly">Monthly</option>
+                    <option value="weekly" data-i18n="recurring.weekly">Weekly</option>
+                  </select>
+                </label>
+                <label>
+                  <span data-i18n="recurring.startDate">Start date</span>
+                  <input name="start_date" type="date" required />
+                </label>
+              </div>
+              <div class="action-row">
+                <button id="recurring-submit-btn" type="submit" data-i18n="recurring.save">Save recurring payment</button>
+                <button id="cancel-recurring-edit-btn" class="secondary hidden" type="button" data-i18n="common.cancelEdit">Cancel edit</button>
+                <button id="generate-recurring-btn" class="secondary" type="button" data-i18n="recurring.generate">Generate due now</button>
+              </div>
+            </form>
+            <p id="recurring-status" class="status"></p>
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th data-i18n="expense.description">Description</th>
+                    <th data-i18n="expense.category">Category</th>
+                    <th data-i18n="recurring.frequency">Frequency</th>
+                    <th data-i18n="recurring.nextDue">Next due</th>
+                    <th data-i18n="expense.amount">Amount (€)</th>
+                    <th data-i18n="recurring.state">State</th>
+                    <th data-i18n="common.actions">Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="recurring-body"></tbody>
+              </table>
+            </div>
+          </section>
+
+          <section class="panel import-panel">
+            <div class="panel-header compact-header">
+              <h2 data-i18n="import.title">Import expenses from CSV</h2>
+              <p data-i18n="import.subtitle">Paste bank exports or spreadsheet rows, preview them, then import only valid items.</p>
+            </div>
+            <label>
+              <span data-i18n="import.csvLabel">CSV text</span>
+              <textarea id="import-csv-input" rows="10" data-i18n-placeholder="import.placeholder" placeholder="date,description,category,amount&#10;2026-04-01,Coffee,Food,4.50"></textarea>
+            </label>
+            <div class="action-row wrap">
+              <button id="preview-import-btn" type="button" data-i18n="import.preview">Preview import</button>
+              <button id="confirm-import-btn" class="secondary" type="button" disabled data-i18n="import.confirm">Import valid rows</button>
+              <button id="clear-import-btn" class="secondary" type="button" data-i18n="import.clear">Clear</button>
+            </div>
+            <p id="import-status" class="status"></p>
+            <div id="import-summary" class="import-summary empty-state" data-i18n="import.empty">Paste CSV data and preview it before importing.</div>
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>#</th>
+                    <th data-i18n="expense.date">Date</th>
+                    <th data-i18n="expense.description">Description</th>
+                    <th data-i18n="expense.category">Category</th>
+                    <th data-i18n="expense.amount">Amount (€)</th>
+                    <th data-i18n="import.statusCol">Status</th>
+                  </tr>
+                </thead>
+                <tbody id="import-preview-body"></tbody>
+              </table>
+            </div>
+          </section>
+        </div>
+      </main>
+    </div>
+
+    <script src="/app.js" defer></script>
+  </body>
+</html>

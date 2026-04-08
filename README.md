@@ -1,213 +1,189 @@
 # ExpenseMate
 
-A web-based personal expense tracker with an LLM-powered assistant that helps users log expenses and understand their spending.
+A web-based personal expense tracker with an assistant that helps users log expenses and understand spending patterns.
 
 ## Demo
 
-> Screenshots will be added after the UI is finalized during Version 2.
->
-> Recommended screenshots to place in this section later:
-> - dashboard page with expense list and category summary
-> - AI assistant page answering a spending-related question
-
-<!-- Example markdown to replace with real files later:
-![Dashboard](docs/screenshots/dashboard.png)
-![AI Assistant](docs/screenshots/assistant.png)
--->
+Add screenshots here after you deploy the UI. Suggested screenshots:
+- authentication screen
+- expense form and expense table
+- dashboard with analytics cards and monthly trend
+- assistant answering a spending question
+- recurring expenses section
 
 ## Product context
 
 ### End users
+- students
+- anyone who wants a simple way to track personal expenses
 
-- Students
-- Anyone who wants a simple way to track personal spending
+### Problem
+People often do not understand where their money goes because tracking expenses manually is slow and inconvenient.
 
-### Problem that the product solves for end users
-
-Many people do not clearly understand where their money goes. They often record expenses inconsistently, forget small purchases, and do not have a quick way to see spending patterns by category or by time period.
-
-### Our solution
-
-ExpenseMate is a simple expense tracking web application with an integrated LLM-powered assistant. It allows users to record expenses, browse expense history, and ask questions in natural language such as:
-
-- “How much did I spend this week?”
-- “How much did I spend on food this month?”
-- “What is my largest expense?”
-
-The project is intentionally built as a web app instead of a Telegram bot because Telegram bots are blocked on the university VM. This keeps the product fully compatible with the hackathon requirements while still including a user-facing client, backend, database, and AI agent.
-
-## Implementation overview
-
-### Architecture
-
-- **Frontend:** web application for expense management and AI chat
-- **Backend:** REST API for expense CRUD operations, summaries, and assistant tool endpoints
-- **Database:** PostgreSQL for persistent storage of expenses and categories
-- **LLM-powered agent:** web-based assistant connected to the backend and expense data
-- **Deployment:** Docker Compose on Ubuntu 24.04 VM
-
-### Version 1
-
-Version 1 focuses on one core feature: **expense tracking**.
-
-Planned Version 1 functionality:
-- add a new expense
-- view saved expenses in a list
-- store expense amount, category, description, and date
-- persist data in PostgreSQL
-- connect web frontend to backend API
-
-### Version 2
-
-Version 2 improves the product and makes it more useful.
-
-Planned Version 2 functionality:
-- spending statistics by category
-- weekly and monthly summaries
-- filtering by date and category
-- LLM-powered assistant in the web app
-- containerized deployment on a VM
-- improved UI/UX and final documentation
+### Solution
+ExpenseMate makes expense tracking fast through a simple web interface and adds an assistant that can summarize spending, manage budgets, and log an expense from natural-language input.
 
 ## Features
 
-### Implemented / planned core features for the project
+### Implemented
+- create an account, sign in, and keep data isolated per user
+- add, edit, delete, and list expenses
+- categorize expenses
+- filter expenses by category, search text, and date range
+- export the current filtered expense list to CSV
+- preview and import expenses from CSV with duplicate detection
+- set a monthly budget and see the remaining amount for the current month
+- set per-category monthly budgets such as Food, Transport, and Bills
+- see summary cards for this week, this month, last 30 days, or all time
+- see spending breakdown by category
+- see daily spending trend for the last 14 days
+- see monthly spending trend for the last 6 months
+- see automatic insights such as top category, month-over-month change, budget warning, category budget warnings, and recurring due soon
+- create recurring expenses for subscriptions or bills
+- edit, pause, activate, or delete recurring expense schedules from the UI
+- generate due recurring expenses automatically
+- see dashboard cards for recurring expenses due today and due soon
+- seed demo data for easier testing
+- use an assistant with built-in commands such as:
+  - `Add coffee 4.50 food`
+  - `Set budget 500`
+  - `Set food category budget 120`
+  - `What is my food budget status?`
+  - `Show category budgets`
+  - `How much did I spend this month?`
+  - `How much did I spend on food?`
+  - `What is my largest expense this month?`
+  - `What is my budget status?`
+  - `Create recurring rent 320 bills monthly`
+  - `What subscriptions are due soon?`
+  - `Generate due recurring expenses`
 
-- expense creation
-- expense history view
-- category-based organization
-- weekly and monthly summaries
-- filtering by date and category
-- LLM-powered natural-language assistant
-- Dockerized deployment on a VM
-
-### Not yet implemented / possible future improvements
-
-- recurring expenses
-- budget limits and alerts
-- export to CSV
-- charts and advanced analytics
-- authentication for multiple users
+### Not yet implemented
+- recurring reminders or notifications by email/chat
+- receipt upload and OCR
+- richer LLM workflows using external APIs or tool calling
 - mobile client
+
+## Architecture
+
+- **Backend:** FastAPI
+- **Database:** PostgreSQL
+- **Frontend:** static web app served through Caddy
+- **Agent:** assistant endpoint with deterministic commands, contextual local fallback, and optional OpenRouter/OpenAI-compatible LLM support
+- **Deployment:** Docker Compose on Ubuntu 24.04
 
 ## Usage
 
-After the project is deployed, the product can be used as follows:
+After starting the app:
+- open `http://localhost:8080`
+- create an account or sign in
+- add an expense from the form or edit an existing one
+- optionally click **Seed demo data**
+- save a monthly budget in the left panel
+- optionally set category-specific budgets such as Food or Transport
+- use filters and export CSV from the expenses table
+- paste CSV rows into the import panel, preview the detected columns, and import valid rows in bulk
+- add recurring expenses such as rent, internet, or subscriptions
+- click **Generate due now** to create expense entries from due recurring schedules
+- explore analytics, category budget watchlist, and upcoming recurring items in the dashboard
+- ask the assistant a question or add an expense through chat
 
-1. Open the web application in a browser.
-2. Add a new expense by entering:
-   - amount
-   - category
-   - description
-   - date
-3. View the saved expense history.
-4. Use filters to inspect spending by category or by time period.
-5. Open the AI assistant and ask questions about your spending in natural language.
-
-### Example user actions
-
-- add a food expense of 9.50 EUR
-- check all expenses from this week
-- ask the assistant how much was spent on transport this month
+Example assistant prompts:
+- `Add lunch 12.50 food`
+- `Set budget 500`
+- `Set food category budget 120`
+- `What is my food budget status?`
+- `Show category budgets`
+- `How much did I spend this week?`
+- `How much did I spend on transport?`
+- `What is my largest expense this month?`
+- `What is my budget status?`
+- `Show category breakdown`
+- `Create recurring gym 19.99 health monthly`
+- `What subscriptions are due soon?`
+- `Generate due recurring expenses`
 
 ## Deployment
 
 ### VM operating system
-
-This project is designed to run on **Ubuntu 24.04**.
+Ubuntu 24.04
 
 ### What should be installed on the VM
-
-Install the following tools:
-
-- Git
 - Docker Engine
 - Docker Compose plugin
-
-Optional but convenient:
-
-- curl
-- make
-
-### Environment variables
-
-Create a `.env` file in the project root based on `.env.example` and fill in the required values.
-
-Typical variables:
-
-```env
-POSTGRES_DB=expensemate
-POSTGRES_USER=expensemate
-POSTGRES_PASSWORD=change_me
-DATABASE_URL=postgresql://expensemate:change_me@db:5432/expensemate
-LLM_API_KEY=your_llm_api_key
-LLM_API_BASE_URL=your_llm_api_base_url
-LLM_MODEL=your_model_name
-APP_PORT=80
-```
+- Git
 
 ### Step-by-step deployment instructions
 
-1. Clone the repository on the VM:
-
-```bash
-git clone https://github.com/Xerbelay/se-toolkit-hackathon.git
-cd se-toolkit-hackathon
-```
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/<your-username>/se-toolkit-hackathon.git
+   cd se-toolkit-hackathon
+   ```
 
 2. Create the environment file:
+   ```bash
+   cp .env.example .env
+   ```
+
+3. Start the project:
+   ```bash
+   docker compose up --build
+   ```
+
+4. Open the product in the browser:
+   ```text
+   http://localhost:8080
+   ```
+
+5. Stop the app when needed:
+   ```bash
+   docker compose down
+   ```
+
+
+### Useful helper files
+- `scripts/check_project.sh` — quick local sanity check before a demo or deploy
+- `docs/sample-expenses.csv` — example CSV for testing the import flow
+
+### Running tests locally
+
+From the `backend` directory:
 
 ```bash
-cp .env.example .env
+pip install -e .[test]
+pytest -q
 ```
 
-3. Edit `.env` and set the required secrets and configuration values.
+## Optional LLM configuration
 
-4. Build and start all services:
+By default, the assistant works without any external API key using built-in rules.
 
-```bash
-docker compose up --build -d
+To enable a more flexible OpenRouter/OpenAI-compatible LLM response path, set these variables in `.env`:
+- `OPENAI_API_KEY`
+- `OPENAI_API_BASE_URL`
+- `OPENAI_MODEL`
+- `OPENROUTER_SITE_URL`
+- `OPENROUTER_APP_TITLE`
+
+Recommended OpenRouter setup:
+
+```env
+OPENAI_API_BASE_URL=https://openrouter.ai/api/v1
+OPENAI_MODEL=openrouter/free
+OPENROUTER_SITE_URL=http://localhost:8080
+OPENROUTER_APP_TITLE=ExpenseMate
 ```
 
-5. Check that the containers are running:
+If the external model is temporarily unavailable, the assistant still falls back to built-in analytics and action guidance instead of returning a server error.
 
-```bash
-docker compose ps
-```
+## Repository requirements checklist
 
-6. Open the product in the browser:
-
-```text
-http://<VM_IP>
-```
-
-7. To view logs if needed:
-
-```bash
-docker compose logs -f
-```
-
-8. To stop the application:
-
-```bash
-docker compose down
-```
-
-## Repository notes
-
-- Repository name: `se-toolkit-hackathon`
-- License: MIT
-- The project should be fully containerized before final submission.
-- The deployed Version 2 should be accessible for demonstration.
-
-## Development notes
-
-The recommended implementation stack for this project is:
-
-- **Frontend:** React
-- **Backend:** FastAPI
-- **Database:** PostgreSQL
-- **AI integration:** LLM-powered assistant with tool access to expense data
-- **Containerization:** Docker Compose
-
-This stack matches the tooling used in the course and keeps the project simple, realistic, and easy to explain during the demo.
+- repository name: `se-toolkit-hackathon`
+- MIT `LICENSE` file included
+- `README.md` included
+- backend + database + web + agent covered
+- Dockerized services
+- ready for VM deployment
+- backend smoke tests included in `backend/tests`
+- GitHub Actions CI workflow included
