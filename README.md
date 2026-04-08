@@ -1,107 +1,174 @@
 # ExpenseMate
 
-A web-based personal expense tracker with an assistant that helps users log expenses and understand spending patterns.
+A personal finance web application that helps users track expenses, manage budgets, savings goals, and recurring payments, and receive assistance from an AI-powered financial assistant.
 
 ## Demo
 
-Add screenshots here after you deploy the UI. Suggested screenshots:
-- authentication screen
-- expense form and expense table
-- dashboard with analytics cards and monthly trend
-- assistant answering a spending question
-- recurring expenses section
+Below are screenshots of the current version of the product.
+
+![Main dashboard](docs/screenshots/1.png)
+![Analytics and insights](docs/screenshots/2.png)
+![Expenses table and filters](docs/screenshots/3.png)
+![Savings goals and category budgets](docs/screenshots/4.png)
+![Assistant, recurring payments, and CSV import](docs/screenshots/5.png)
 
 ## Product context
 
 ### End users
-- students
-- anyone who wants a simple way to track personal expenses
+ExpenseMate is designed for:
+- students who want to manage their personal budget;
+- people who want a simple tool to understand where their money goes;
+- users who need a lightweight finance tracker with budgeting, recurring payments, and savings goals in one place.
 
-### Problem
-People often do not understand where their money goes because tracking expenses manually is slow and inconvenient.
+### Problem that the product solves for end users
+Many people do not clearly understand how they spend money during the month. Manual tracking is inconvenient, monthly spending is often underestimated, recurring payments are easy to forget, and savings goals are difficult to monitor consistently. As a result, users lose control over their budget and struggle to plan future spending.
 
-### Solution
-ExpenseMate makes expense tracking fast through a simple web interface and adds an assistant that can summarize spending, manage budgets, and log an expense from natural-language input.
+### Your solution
+ExpenseMate provides a single web application where users can:
+- record expenses quickly;
+- view all expenses in one place;
+- set a monthly budget and category budgets;
+- manage savings goals;
+- track recurring payments;
+- import and export expense data via CSV;
+- use an AI assistant to analyze spending, answer finance-related questions, and perform quick actions.
+
+The product combines expense tracking, budgeting, planning, and AI-based guidance in one interface that is easy to use and explain.
 
 ## Features
 
-### Implemented
-- create an account, sign in, and keep data isolated per user
-- add, edit, delete, and list expenses
-- categorize expenses
-- filter expenses by category, search text, and date range
-- export the current filtered expense list to CSV
-- preview and import expenses from CSV with duplicate detection
-- set a monthly budget and see the remaining amount for the current month
-- set per-category monthly budgets such as Food, Transport, and Bills
-- see summary cards for this week, this month, last 30 days, or all time
-- see spending breakdown by category
-- see daily spending trend for the last 14 days
-- see monthly spending trend for the last 6 months
-- see automatic insights such as top category, month-over-month change, budget warning, category budget warnings, and recurring due soon
-- create recurring expenses for subscriptions or bills
-- edit, pause, activate, or delete recurring expense schedules from the UI
-- generate due recurring expenses automatically
-- see dashboard cards for recurring expenses due today and due soon
-- seed demo data for easier testing
-- use an assistant with built-in commands such as:
-  - `Add coffee 4.50 food`
-  - `Set budget 500`
-  - `Set food category budget 120`
-  - `What is my food budget status?`
-  - `Show category budgets`
-  - `How much did I spend this month?`
-  - `How much did I spend on food?`
-  - `What is my largest expense this month?`
-  - `What is my budget status?`
-  - `Create recurring rent 320 bills monthly`
-  - `What subscriptions are due soon?`
-  - `Generate due recurring expenses`
+### Implemented features
+- User registration and login
+- Per-user isolated data
+- Add, edit, delete, and view expenses
+- Expense categorization
+- Search and filtering by category, text, and date range
+- CSV export of saved expenses
+- CSV import with preview and duplicate detection
+- Monthly budget tracking
+- Category budget tracking
+- Savings goals with progress tracking
+- Recurring payments management
+- Dashboard with summary cards and analytics
+- Spending breakdown by category
+- Daily trend and monthly trend analytics
+- Automatic insights about spending and budget status
+- Demo data generation
+- Russian / English language switch
+- AI assistant built into the web application
+- Assistant support for:
+  - spending analysis
+  - budget questions
+  - savings goal questions
+  - recurring payment questions
+  - quick financial actions and project-aware commands
 
-### Not yet implemented
-- recurring reminders or notifications by email/chat
-- receipt upload and OCR
-- richer LLM workflows using external APIs or tool calling
-- mobile client
+### Not yet implemented features
+- Receipt OCR / receipt scanning
+- Email or push reminders
+- Shared budgets for multiple users
+- Advanced long-term reporting and downloadable reports
+- Mobile client
+
+## Main functionality overview
+
+### Expense tracking
+Users can create, edit, and delete expense records. Each expense contains:
+- amount;
+- category;
+- description;
+- date.
+
+### Budgeting
+The application supports:
+- one monthly budget for the whole account;
+- separate monthly budgets for categories such as Food, Transport, or Bills.
+
+This allows users to understand both overall spending and overspending in specific areas.
+
+### Savings goals
+Users can create savings goals with:
+- goal name;
+- target amount;
+- current saved amount;
+- target date;
+- optional note.
+
+The interface shows progress and the remaining amount to save.
+
+### Recurring payments
+Users can create recurring records for subscriptions, rent, utilities, and other repeated expenses. The system supports recurring payment generation and helps users keep regular expenses visible.
+
+### Analytics
+The dashboard provides:
+- total spending;
+- average expense;
+- largest expense;
+- projected month-end spending;
+- category breakdown;
+- daily trend;
+- monthly trend;
+- key insights and financial health information.
+
+### AI assistant
+The assistant is integrated into the web application and helps users:
+- ask questions about spending;
+- understand budget status;
+- review savings goals;
+- check recurring payments;
+- perform quick actions using natural-language commands.
+
+It supports English and Russian prompts.
+
+Examples:
+- `Analyze my spending`
+- `Show my goals`
+- `Set budget 500`
+- `Add coffee 4.50 food`
+- `Create recurring rent 320 bills monthly`
+- `Проанализируй мои траты`
+- `Покажи мои цели`
+- `Установи бюджет 500`
+
+The assistant can work with built-in project-aware logic and can also use an external LLM through an OpenRouter/OpenAI-compatible API.
 
 ## Architecture
 
-- **Backend:** FastAPI
-- **Database:** PostgreSQL
-- **Frontend:** static web app served through Caddy
-- **Agent:** assistant endpoint with deterministic commands, contextual local fallback, and optional OpenRouter/OpenAI-compatible LLM support
-- **Deployment:** Docker Compose on Ubuntu 24.04
+### Backend
+- FastAPI
+
+### Database
+- PostgreSQL
+
+### Frontend
+- Static web frontend served through Caddy
+
+### AI / agent component
+- Built-in assistant endpoint
+- Project-aware logic for finance actions and analysis
+- Optional external LLM support through OpenRouter / OpenAI-compatible API
+
+### Deployment
+- Docker Compose
+- VM-ready deployment flow for Ubuntu 24.04
 
 ## Usage
 
-After starting the app:
-- open `http://localhost:8080`
-- create an account or sign in
-- add an expense from the form or edit an existing one
-- optionally click **Seed demo data**
-- save a monthly budget in the left panel
-- optionally set category-specific budgets such as Food or Transport
-- use filters and export CSV from the expenses table
-- paste CSV rows into the import panel, preview the detected columns, and import valid rows in bulk
-- add recurring expenses such as rent, internet, or subscriptions
-- click **Generate due now** to create expense entries from due recurring schedules
-- explore analytics, category budget watchlist, and upcoming recurring items in the dashboard
-- ask the assistant a question or add an expense through chat
+After starting the application:
 
-Example assistant prompts:
-- `Add lunch 12.50 food`
-- `Set budget 500`
-- `Set food category budget 120`
-- `What is my food budget status?`
-- `Show category budgets`
-- `How much did I spend this week?`
-- `How much did I spend on transport?`
-- `What is my largest expense this month?`
-- `What is my budget status?`
-- `Show category breakdown`
-- `Create recurring gym 19.99 health monthly`
-- `What subscriptions are due soon?`
-- `Generate due recurring expenses`
+1. Open the app in a browser.
+2. Create an account or sign in.
+3. Add expenses manually using the expense form.
+4. Optionally click **Seed demo data** to populate the application with example records.
+5. Set a monthly budget.
+6. Optionally set category-specific budgets.
+7. Create one or more savings goals.
+8. Add recurring payments such as rent or subscriptions.
+9. Use filters in the expenses table to search and review records.
+10. Export expense data to CSV if needed.
+11. Import CSV data through the import section.
+12. Use the AI assistant for analysis and quick actions.
+13. Switch the interface language between English and Russian.
 
 ## Deployment
 
@@ -117,73 +184,5 @@ Ubuntu 24.04
 
 1. Clone the repository:
    ```bash
-   git clone https://github.com/<your-username>/se-toolkit-hackathon.git
+   git clone https://github.com/Xerbelay/se-toolkit-hackathon.git
    cd se-toolkit-hackathon
-   ```
-
-2. Create the environment file:
-   ```bash
-   cp .env.example .env
-   ```
-
-3. Start the project:
-   ```bash
-   docker compose up --build
-   ```
-
-4. Open the product in the browser:
-   ```text
-   http://localhost:8080
-   ```
-
-5. Stop the app when needed:
-   ```bash
-   docker compose down
-   ```
-
-
-### Useful helper files
-- `scripts/check_project.sh` — quick local sanity check before a demo or deploy
-- `docs/sample-expenses.csv` — example CSV for testing the import flow
-
-### Running tests locally
-
-From the `backend` directory:
-
-```bash
-pip install -e .[test]
-pytest -q
-```
-
-## Optional LLM configuration
-
-By default, the assistant works without any external API key using built-in rules.
-
-To enable a more flexible OpenRouter/OpenAI-compatible LLM response path, set these variables in `.env`:
-- `OPENAI_API_KEY`
-- `OPENAI_API_BASE_URL`
-- `OPENAI_MODEL`
-- `OPENROUTER_SITE_URL`
-- `OPENROUTER_APP_TITLE`
-
-Recommended OpenRouter setup:
-
-```env
-OPENAI_API_BASE_URL=https://openrouter.ai/api/v1
-OPENAI_MODEL=openrouter/free
-OPENROUTER_SITE_URL=http://localhost:8080
-OPENROUTER_APP_TITLE=ExpenseMate
-```
-
-If the external model is temporarily unavailable, the assistant still falls back to built-in analytics and action guidance instead of returning a server error.
-
-## Repository requirements checklist
-
-- repository name: `se-toolkit-hackathon`
-- MIT `LICENSE` file included
-- `README.md` included
-- backend + database + web + agent covered
-- Dockerized services
-- ready for VM deployment
-- backend smoke tests included in `backend/tests`
-- GitHub Actions CI workflow included
